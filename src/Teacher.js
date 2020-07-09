@@ -11,7 +11,6 @@ class Teacher extends Component {
     this.state = {
       teacherData: [],
       studentData: [],
-      id: '0',
       inputRef: React.createRef()
     }
   }
@@ -74,7 +73,7 @@ class Teacher extends Component {
           </div>
         </div>
         <Table>
-          <thead className={styles.tableheader}>
+          <thead>
             <tr>
               <th>Name</th>
               <th>Avg. Time</th>
