@@ -1,11 +1,16 @@
 import React, { Component } from 'react';
-// import MaterialTable, { MTableToolbar } from 'material-table';
 import '../src/Table.css';
 
 
+function  value(){
+  var v = (document.getElementById("id")==null) ? 1 :document.getElementById("id").value;
+  console.log(v)
+  return v
+}
+
 class Student extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       studentData: [],
       assignmentData: []
@@ -15,15 +20,25 @@ class Student extends Component {
     this.getStudent();
   }
 
-
-  getStudent() {
-    fetch('http://localhost:8080/api/student')
+  getStudent = () => {
+    fetch('http://localhost:8080/api/student?studentId=' + value())
       .then(results => results.json())
       .then(
         (results) => {
           console.log(results.data)
-          this.setState({ studentData: results.data.students[0] })
-          this.setState({ assignmentData: results.data.students[0].assignments })
+          try {
+            if(results.data.students != null){
+            this.setState({ studentData: results.data.students[0] })
+            this.setState({ assignmentData: results.data.students[0].assignments })
+            }
+            else{
+              this.setState({ studentData: [] })
+              this.setState({ assignmentData: [] })
+            }
+          }
+          catch (err) {
+            console.log(err)
+          }
         }
       )
   }
@@ -32,9 +47,12 @@ class Student extends Component {
   render() {
     return (
       <div>
+        ID:
+        <input style={{ padding: "1px" }} type="number" id="id" min='1' defaultValue='1' />
+        <button id="okBtn" onClick={this.getStudent}>OK</button>
         <div>
           <div>
-            <h4>ID - {this.state.studentData.id}, Student Name - {this.state.studentData.name}</h4>
+            <h4 style={{ textAlign: "left" }}>Student Name - {this.state.studentData.name}</h4>
           </div>
         </div>
         <table>

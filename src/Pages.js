@@ -5,14 +5,23 @@ import Student from './Student';
 
 
 const Nav = () => (
-  <div>
-      <div><Link to="/teacherview">Teacher View</Link></div>
-      <div><Link to="/studentview">Student View</Link></div>
+
+  <div style={{ display:"flex", flexDirection:"row", textAlign: "left", padding: "10px" }}>
+    <div style={{ paddingTop: "10px"}}>
+      <Link to="/teacherview"> Teacher View</Link>
+    </div>
+    <div style={{paddingLeft:"20px", paddingTop: "10px", paddingBottom: "20px" }}>
+      <Link to="/studentview"> Student View</Link>
+    </div>
   </div>
 );
 
-const TeacherView = () => <div><Teacher/></div>;
-const StudentView = () => <div><Student/></div>;
+const TeacherView = () => 
+(<div><Teacher/></div>);
+
+const StudentView = () =>
+(<div><Student/></div>);
+
 
 class Pages extends Component {
   constructor() {
@@ -24,16 +33,14 @@ class Pages extends Component {
 
   render() {
     return (
+      <div  style={{ textAlign: "left", padding: "10px" }}>
       <Router>
-
-        {/* Router component can have only 1 child. We'll use a simple
-          div element for this example. */}
-        <div>
           <Nav />
           <Route exact path="/teacherview" component={TeacherView} />
-          <Route path="/studentview" component={StudentView} />
-        </div>
+          <Route exact path="/studentview" component={StudentView} />
+          {/* <div onClick={this.reload}>Reload</div> */}
       </Router>
+      </div>
     );
   }
 }
