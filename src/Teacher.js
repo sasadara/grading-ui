@@ -1,12 +1,9 @@
 import React, { Component } from 'react';
 import styles from '../src/Table.css';
+import { Table } from 'react-bootstrap';
+import { Row, Col, Form, Button } from 'react-bootstrap';
 
-function  value(){
-  var v = (document.getElementById("id")==null) ? 1 :document.getElementById("id").value;
-  console.log(v)
-  return v
-}
-
+var value = '1'
 
 class Teacher extends Component {
   constructor(props) {
@@ -14,25 +11,34 @@ class Teacher extends Component {
     this.state = {
       teacherData: [],
       studentData: [],
-      id : '0'
+      id: '0',
+      inputRef: React.createRef()
     }
   }
   componentDidMount() {
     this.getTeacher();
   }
 
+  handleButtonClick(params) {
+    const { inputRef } = this.state;
+    value = parseInt(inputRef.current.value)
+    console.log(value)
+    this.getTeacher()
+  }
+
+
   getTeacher = () => {
-    fetch('http://localhost:8080/api/teacher?teacherId=' + value())
+    fetch('http://localhost:8080/api/teacher?teacherId=' + value)
       .then(results => results.json())
       .then(
         (results) => {
           console.log(results.data)
           try {
-            if(results.data.teachers != null){
+            if (results.data.teachers != null) {
               this.setState({ teacherData: results.data.teachers[0] })
               this.setState({ studentData: results.data.teachers[0].students })
             }
-            else{
+            else {
               this.setState({ studentData: [] })
               this.setState({ teacherData: [] })
             }
@@ -46,17 +52,28 @@ class Teacher extends Component {
 
 
   render() {
+    const { inputRef } = this.state;
     return (
       <div>
-        ID:
-        <input style={{padding: "1px" }} type="number" id="id" min='1' defaultValue= '1' />
-        <button id="okBtn" onClick={this.getTeacher}>OK</button>
+        <Form.Row className="mb-33">
+          <Form.Group as={Row}>
+            <Col sm={2}>
+              <Form.Label>ID</Form.Label>
+            </Col>
+            <Col sm={8}>
+              <Form.Control type="number" placeholder="Enter ID" defaultValue='1' ref={inputRef} />
+            </Col>
+            <Col sm={2}>
+              <Button onClick={this.handleButtonClick.bind(this)} variant="primary">OK</Button>
+            </Col>
+          </Form.Group>
+        </Form.Row>
         <div>
           <div>
-            <h4 style={{textAlign:"left"}}>Teacher Name - {this.state.teacherData.name}</h4>
+            <h4 style={{ textAlign: "left" }}>Teacher Name - {this.state.teacherData.name}</h4>
           </div>
         </div>
-        <table>
+        <Table>
           <thead className={styles.tableheader}>
             <tr>
               <th>Name</th>
@@ -77,7 +94,7 @@ class Teacher extends Component {
               )
             })}
           </tbody>
-        </table>
+        </Table>
       </div>
     );
   }

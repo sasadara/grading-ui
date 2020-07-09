@@ -1,12 +1,9 @@
 import React, { Component } from 'react';
 import '../src/Table.css';
+import { Table } from 'react-bootstrap';
+import { Row, Col, Form, Button } from 'react-bootstrap';
 
-
-function  value(){
-  var v = (document.getElementById("id")==null) ? 1 :document.getElementById("id").value;
-  console.log(v)
-  return v
-}
+var value = '1'
 
 class Student extends Component {
   constructor(props) {
@@ -20,18 +17,25 @@ class Student extends Component {
     this.getStudent();
   }
 
+  handleButtonClick(params) {
+    const { inputRef } = this.state;
+    value = parseInt(inputRef.current.value)
+    console.log(value)
+    this.getStudent()
+  }
+
   getStudent = () => {
-    fetch('http://localhost:8080/api/student?studentId=' + value())
+    fetch('http://localhost:8080/api/student?studentId=' + value)
       .then(results => results.json())
       .then(
         (results) => {
           console.log(results.data)
           try {
-            if(results.data.students != null){
-            this.setState({ studentData: results.data.students[0] })
-            this.setState({ assignmentData: results.data.students[0].assignments })
+            if (results.data.students != null) {
+              this.setState({ studentData: results.data.students[0] })
+              this.setState({ assignmentData: results.data.students[0].assignments })
             }
-            else{
+            else {
               this.setState({ studentData: [] })
               this.setState({ assignmentData: [] })
             }
@@ -47,15 +51,25 @@ class Student extends Component {
   render() {
     return (
       <div>
-        ID:
-        <input style={{ padding: "1px" }} type="number" id="id" min='1' defaultValue='1' />
-        <button id="okBtn" onClick={this.getStudent}>OK</button>
+        <Form.Row className="mb-33">
+          <Form.Group as={Row}>
+            <Col sm={2}>
+              <Form.Label>ID</Form.Label>
+            </Col>
+            <Col sm={8}>
+              <Form.Control type="number" placeholder="Enter ID" defaultValue='1' />
+            </Col>
+            <Col sm={2}>
+              <Button onClick={this.handleButtonClick.bind(this)} variant="primary">OK</Button>
+            </Col>
+          </Form.Group>
+        </Form.Row>
         <div>
           <div>
             <h4 style={{ textAlign: "left" }}>Student Name - {this.state.studentData.name}</h4>
           </div>
         </div>
-        <table>
+        <Table>
           <thead>
             <tr>
               <th>ID</th>
@@ -100,7 +114,7 @@ class Student extends Component {
               )
             })}
           </tbody>
-        </table>
+        </Table>
       </div>
     );
   }
