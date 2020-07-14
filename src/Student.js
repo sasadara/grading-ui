@@ -10,7 +10,8 @@ class Student extends Component {
     super(props);
     this.state = {
       studentData: [],
-      assignmentData: []
+      assignmentData: [],
+      inputRef: React.createRef()
     }
   }
   componentDidMount() {
@@ -49,6 +50,7 @@ class Student extends Component {
 
 
   render() {
+    const { inputRef } = this.state;
     return (
       <div>
         <Form.Row className="mb-33">
@@ -57,7 +59,7 @@ class Student extends Component {
               <Form.Label>ID</Form.Label>
             </Col>
             <Col sm={8}>
-              <Form.Control type="number" placeholder="Enter ID" defaultValue='1' />
+              <Form.Control type="number" placeholder="Enter ID" defaultValue='1'  ref={inputRef} />
             </Col>
             <Col sm={2}>
               <Button onClick={this.handleButtonClick.bind(this)} variant="primary">OK</Button>
